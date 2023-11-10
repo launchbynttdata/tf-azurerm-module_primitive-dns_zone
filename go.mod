@@ -1,6 +1,6 @@
-module github.com/nexient-llc/tf-module-skeleton
+module github.com/nexient-llc/tf-azurerm-module-dns_zone
 
-go 1.15
+go 1.20
 
 require (
 	github.com/gruntwork-io/terratest v0.43.12
