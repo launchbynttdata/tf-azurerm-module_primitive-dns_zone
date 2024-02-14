@@ -5,7 +5,7 @@
 
 ## Overview
 
-What does this module do?
+This module deploys the instance of Azure Public DNS Zone service.
 
 ## Pre-Commit hooks
 
@@ -103,3 +103,45 @@ If `make check` target is successful, developer is good to commit the code to pr
 - runs `conftests`. `conftests` make sure `policy` checks are successful.
 - runs `terratest`. This is integration test suit.
 - runs `opa` tests
+<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+## Requirements
+
+| Name | Version |
+|------|---------|
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.5.0, <= 1.5.5 |
+| <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | ~> 3.90 |
+
+## Providers
+
+| Name | Version |
+|------|---------|
+| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | 3.90.0 |
+
+## Modules
+
+No modules.
+
+## Resources
+
+| Name | Type |
+|------|------|
+| [azurerm_dns_zone.public](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/dns_zone) | resource |
+
+## Inputs
+
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | The resource group that resources will be created in. | `string` | n/a | yes |
+| <a name="input_domain_names"></a> [domain\_names](#input\_domain\_names) | The list of domain names of the DNS Zones. | `list(string)` | n/a | yes |
+| <a name="input_tags"></a> [tags](#input\_tags) | A mapping of tags to assign to the resource. | `map(string)` | `{}` | no |
+| <a name="input_resource_name_tag"></a> [resource\_name\_tag](#input\_resource\_name\_tag) | The tag to use for the resource name. | `string` | `null` | no |
+
+## Outputs
+
+| Name | Description |
+|------|-------------|
+| <a name="output_ids"></a> [ids](#output\_ids) | The DNS Zone IDs. |
+| <a name="output_max_number_of_record_sets"></a> [max\_number\_of\_record\_sets](#output\_max\_number\_of\_record\_sets) | (Optional) Maximum number of Records in the zones. Defaults to 1000. |
+| <a name="output_number_of_record_sets"></a> [number\_of\_record\_sets](#output\_number\_of\_record\_sets) | (Optional) The number of records already in the zones. |
+| <a name="output_name_servers"></a> [name\_servers](#output\_name\_servers) | (Optional) A list of values that make up the NS record for the zones. |
+<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

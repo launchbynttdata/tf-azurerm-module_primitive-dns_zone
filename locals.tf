@@ -10,14 +10,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-output "name_servers" {
-  value = module.dns_zone.name_servers
-}
-
-output "zone_id" {
-  value = module.dns_zone.zone_id
-}
-
-output "zone_name" {
-  value = module.dns_zone.zone_name
+locals {
+  default_tags = {
+    provisioner = "terraform"
+  }
+  tags = merge(
+    local.default_tags,
+    var.tags != null ? var.tags : {},
+    var.resource_name_tag != null ? { resource_name = var.resource_name_tag } : {}
+  )
 }

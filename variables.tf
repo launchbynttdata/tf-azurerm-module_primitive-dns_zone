@@ -10,16 +10,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-# Common Variables
-variable "resource_group" {
+# Variables used for public DNS Zone
+variable "resource_group_name" {
   description = "The resource group that resources will be created in."
-  type = object({
-    name     = string
-    location = string
-  })
+  type        = string
 }
 
-variable "domain_name" {
-  description = "The domain name of the DNS Zone."
+variable "domain_names" {
+  description = "The list of domain names of the DNS Zones."
+  type        = list(string)
+}
+
+variable "tags" {
+  description = "A mapping of tags to assign to the resource."
+  type        = map(string)
+  default     = {}
+}
+
+variable "resource_name_tag" {
+  description = "The tag to use for the resource name."
   type        = string
+  default     = null
 }

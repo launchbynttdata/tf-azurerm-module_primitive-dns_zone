@@ -9,11 +9,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
-variable "zone_name" {
-  type        = string
-}
-
-variable "resource_group" {
-  type        = string
+locals {
+  resource_group                = module.resource_names["resource_group"].standard
+  public_dns_zone_standard_name = module.resource_names["public_dns_zone"].standard
 }

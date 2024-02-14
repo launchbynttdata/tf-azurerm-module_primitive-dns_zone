@@ -11,6 +11,9 @@
 // limitations under the License.
 
 resource "azurerm_dns_zone" "public" {
-  name                = var.domain_name
-  resource_group_name = var.resource_group.name
+  for_each = toset(var.domain_names)
+
+  name                = each.key
+  resource_group_name = var.resource_group_name
+  tags                = local.tags
 }

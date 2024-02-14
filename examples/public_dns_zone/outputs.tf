@@ -11,21 +11,26 @@
 // limitations under the License.
 
 output "ids" {
-  value       = values(azurerm_dns_zone.public)[*].id
+  value       = module.public_dns_zone.ids
   description = "The DNS Zone IDs."
 }
 
 output "max_number_of_record_sets" {
-  value       = values(azurerm_dns_zone.public)[*].max_number_of_record_sets
-  description = "(Optional) Maximum number of Records in the zones. Defaults to 1000."
+  value       = module.public_dns_zone.max_number_of_record_sets
+  description = "(Optional) Maximum number of Records in the zone. Defaults to 1000."
 }
 
 output "number_of_record_sets" {
-  value       = values(azurerm_dns_zone.public)[*].number_of_record_sets
-  description = "(Optional) The number of records already in the zones."
+  value       = module.public_dns_zone.number_of_record_sets
+  description = "(Optional) The number of records already in the zone."
 }
 
 output "name_servers" {
-  value       = values(azurerm_dns_zone.public)[*].name_servers
-  description = "(Optional) A list of values that make up the NS record for the zones."
+  value       = module.public_dns_zone.name_servers
+  description = "(Optional) A list of values that make up the NS record for the zone."
+}
+
+output "resource_group_name" {
+  value       = module.resource_group.name
+  description = "(Optional) The name of the resource group in which the zone exists."
 }
