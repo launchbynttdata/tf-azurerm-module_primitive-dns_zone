@@ -1,11 +1,11 @@
-module github.com/nexient-llc/tf-azurerm-module_primitive-dns_zone
+module github.com/launchbynttdata/tf-azurerm-module_primitive-dns_zone
 
 go 1.21.7
 
 require (
 	github.com/Azure/azure-sdk-for-go v68.0.0+incompatible
 	github.com/gruntwork-io/terratest v0.46.11
-	github.com/nexient-llc/lcaf-component-terratest-common v1.0.1
+	github.com/launchbynttdata/lcaf-component-terratest v1.0.1
 	github.com/stretchr/testify v1.8.4
 )
 
