@@ -32,7 +32,7 @@ func TestDnsZoneModule(t *testing.T) {
 		SetTestConfigFolderName(testConfigsExamplesFolderDefault).
 		SetTestConfigFileName(infraTFVarFileNameDefault).
 		SetTestSpecificFlags(map[string]types.TestFlags{
-			"complete": {
+			"public_dns_zone": {
 				"IS_TERRAFORM_IDEMPOTENT_APPLY": true,
 			},
 		}).

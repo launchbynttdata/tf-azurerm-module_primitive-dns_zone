@@ -2,52 +2,45 @@ package common
 
 import (
 	"context"
+	"os"
 	"testing"
 
-	"github.com/Azure/azure-sdk-for-go/profiles/latest/dns/mgmt/dns"
+	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
+	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/dns/armdns"
 	"github.com/gruntwork-io/terratest/modules/terraform"
-	"github.com/launchbynttdata/lcaf-component-terratest/lib/azure/configure"
-	internalDns "github.com/launchbynttdata/lcaf-component-terratest/lib/azure/dns"
-	"github.com/launchbynttdata/lcaf-component-terratest/lib/azure/login"
 	"github.com/launchbynttdata/lcaf-component-terratest/types"
 	"github.com/stretchr/testify/assert"
 )
 
-const terraformDir string = "../../examples/public_dns_zone"
-
 func TestDnsZone(t *testing.T, ctx types.TestContext) {
 
-	envVarMap := login.GetEnvironmentVariables()
-	clientID := envVarMap["clientID"]
-	clientSecret := envVarMap["clientSecret"]
-	tenantID := envVarMap["tenantID"]
-	subscriptionID := envVarMap["subscriptionID"]
-
-	spt, err := login.GetServicePrincipalToken(clientID, clientSecret, tenantID)
-	if err != nil {
-		t.Fatalf("Error getting Service Principal Token: %v", err)
+	subscriptionID := os.Getenv("ARM_SUBSCRIPTION_ID")
+	if len(subscriptionID) == 0 {
+		t.Fatal("ARM_SUBSCRIPTION_ID is not set in the environment variables ")
 	}
 
-	dnsZonesClient := internalDns.GetDNSZonesClient(spt, subscriptionID)
+	cred, err := azidentity.NewDefaultAzureCredential(nil)
+	if err != nil {
+		t.Fatalf("Unable to get credentials: %e\n", err)
+	}
 
-	var varFiles = []string{"../../examples/public_dns_zone/test.tfvars"}
+	clientFactory, err := armdns.NewClientFactory(subscriptionID, cred, nil)
+	if err != nil {
+		t.Fatalf("Unable to get clientFactory: %e\n", err)
+	}
 
-	terraformOptions := configure.ConfigureTerraform(terraformDir, varFiles)
-
-	defer terraform.Destroy(t, terraformOptions)
-
-	terraform.InitAndApply(t, terraformOptions)
+	dnsZonesClient := clientFactory.NewZonesClient()
 
 	dnsZoneIds := terraform.OutputList(t, ctx.TerratestTerraformOptions(), "ids")
 	for range dnsZoneIds {
 		t.Run("doesDnsZoneExist", func(t *testing.T) {
-			checkDNSZoneExistence(t, dnsZonesClient, terraformOptions, ctx)
+			checkDNSZoneExistence(t, dnsZonesClient, ctx)
 		})
 	}
 }
 
-func checkDNSZoneExistence(t *testing.T, dnsZonesClient dns.ZonesClient, terraformOptions *terraform.Options, ctx types.TestContext) {
-	resourceGroupName := terraform.Output(t, terraformOptions, "resource_group_name")
+func checkDNSZoneExistence(t *testing.T, dnsZonesClient *armdns.ZonesClient, ctx types.TestContext) {
+	resourceGroupName := terraform.Output(t, ctx.TerratestTerraformOptions(), "resource_group_name")
 	expectedDomainNames := make(map[string]bool)
 	inputDomainNames := ctx.TestConfig().(*ThisTFModuleConfig).DomainNames
 
@@ -58,7 +51,7 @@ func checkDNSZoneExistence(t *testing.T, dnsZonesClient dns.ZonesClient, terrafo
 
 	// If expected domain name matches with actual domain name, set the map value to true
 	for domain := range expectedDomainNames {
-		dnsZone, err := dnsZonesClient.Get(context.Background(), resourceGroupName, domain)
+		dnsZone, err := dnsZonesClient.Get(context.Background(), resourceGroupName, domain, nil)
 		if err != nil {
 			t.Fatalf("Error getting DNS Zone: %v", err)
 		}
