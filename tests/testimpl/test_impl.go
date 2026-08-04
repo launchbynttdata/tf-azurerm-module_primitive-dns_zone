@@ -69,3 +69,7 @@ func checkDNSZoneExistence(t *testing.T, dnsZonesClient *armdns.ZonesClient, ctx
 	}
 
 }
+
+func TestComposableReadonlyDnsZone(t *testing.T, ctx types.TestContext) {
+	TestDnsZone(t, ctx)
+}
