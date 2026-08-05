@@ -38,5 +38,5 @@ func TestSkeletonModule(t *testing.T) {
 		}).
 		Build()
 
-	lib.RunSetupTestTeardown(t, *ctx, testimpl.TestDnsZone)
+	lib.RunNonDestructiveTest(t, *ctx, testimpl.TestComposableReadonlyDnsZone)
 }

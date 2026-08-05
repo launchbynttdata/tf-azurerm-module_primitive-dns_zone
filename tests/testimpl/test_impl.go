@@ -21,12 +21,12 @@ func TestDnsZone(t *testing.T, ctx types.TestContext) {
 
 	cred, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
-		t.Fatalf("Unable to get credentials: %e\n", err)
+		t.Fatalf("Unable to get credentials: %v\n", err)
 	}
 
 	clientFactory, err := armdns.NewClientFactory(subscriptionID, cred, nil)
 	if err != nil {
-		t.Fatalf("Unable to get clientFactory: %e\n", err)
+		t.Fatalf("Unable to get clientFactory: %v\n", err)
 	}
 
 	dnsZonesClient := clientFactory.NewZonesClient()
@@ -68,4 +68,8 @@ func checkDNSZoneExistence(t *testing.T, dnsZonesClient *armdns.ZonesClient, ctx
 		assert.True(t, found, "DNS Zone does not exist for domain: "+domain)
 	}
 
+}
+
+func TestComposableReadonlyDnsZone(t *testing.T, ctx types.TestContext) {
+	TestDnsZone(t, ctx)
 }

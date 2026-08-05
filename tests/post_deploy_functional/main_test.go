@@ -21,7 +21,8 @@ import (
 )
 
 const (
-	testConfigsExamplesFolderDefault = "../../examples"
+	// Functional tests explicitly target the public_dns_zone example.
+	testConfigsExamplesFolderDefault = "../../examples/public_dns_zone"
 	infraTFVarFileNameDefault        = "test.tfvars"
 )
 
