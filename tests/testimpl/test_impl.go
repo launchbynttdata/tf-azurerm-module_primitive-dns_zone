@@ -31,7 +31,7 @@ func TestDnsZone(t *testing.T, ctx types.TestContext) {
 
 	dnsZonesClient := clientFactory.NewZonesClient()
 
-	dnsZoneIds := terraform.OutputList(t, ctx.TerratestTerraformOptions(), "ids")
+	dnsZoneIds := terraform.OutputListContext(t, context.Background(), ctx.TerratestTerraformOptions(), "ids")
 	for range dnsZoneIds {
 		t.Run("doesDnsZoneExist", func(t *testing.T) {
 			checkDNSZoneExistence(t, dnsZonesClient, ctx)
@@ -40,7 +40,7 @@ func TestDnsZone(t *testing.T, ctx types.TestContext) {
 }
 
 func checkDNSZoneExistence(t *testing.T, dnsZonesClient *armdns.ZonesClient, ctx types.TestContext) {
-	resourceGroupName := terraform.Output(t, ctx.TerratestTerraformOptions(), "resource_group_name")
+	resourceGroupName := terraform.OutputContext(t, context.Background(), ctx.TerratestTerraformOptions(), "resource_group_name")
 	expectedDomainNames := make(map[string]bool)
 	inputDomainNames := ctx.TestConfig().(*ThisTFModuleConfig).DomainNames
 
